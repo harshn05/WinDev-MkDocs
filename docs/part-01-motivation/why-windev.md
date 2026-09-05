@@ -2,33 +2,19 @@
 
 ## 1.1 The Problem
 
-Modern scientific and engineering software rarely depends on a single compiler, language, or library.
+Modern scientific and engineering software rarely depends on a single compiler, language, or library. A typical computational development environment can involve C/C++, Python, multiple compilers (MSVC, MinGW-w64, Clang), CMake, Qt, VTK, ITK, OpenCV, BLAS/LAPACK implementations, numerical libraries, Python bindings, build tools, platform SDKs, shell utilities, environment variables, and a web of DLLs and runtime dependencies. Individually, none of these is hard to install or configure. The real difficulty, the part that consumes days rather than minutes, lies in how they interact once assembled together.
 
-A typical computational development environment may involve:
+**Compiler and ABI mismatches.** A library compiled with MSVC and a library compiled with MinGW-w64 do not necessarily agree on calling conventions, name mangling, exception handling, or the C++ runtime they link against. Code can compile cleanly, link without errors, and still crash or corrupt memory at runtime because two halves of the program disagree about how a `std::string` or `std::vector` is laid out in memory. These bugs rarely announce themselves at build time. They surface later, intermittently, and are disproportionately expensive to trace back to their root cause.
 
-- C/C++
-- Python
-- multiple compilers
-- CMake
-- Qt
-- VTK
-- ITK
-- OpenCV
-- BLAS/LAPACK implementations
-- numerical libraries
-- Python bindings
-- build tools
-- platform SDKs
-- shell utilities
-- environment variables
-- DLLs and runtime dependencies
+**Hidden and transitive dependencies.** A library like VTK or ITK doesn't just depend on a compiler. It depends on a specific version of a specific compiler, built against a specific runtime, often with its own vendored or expected versions of zlib, libpng, HDF5, or similar. Qt adds its own dependency tree and its own deployment tooling (`windeployqt`) that has to correctly resolve everything a plugin or module pulls in. One library's build settings can quietly constrain what every library above it in the stack is allowed to do.
 
-Each individual component is manageable. The difficulty comes from their **interaction**.
+**Stale build state.** CMake caches absolute paths, compiler identities, and found-package locations inside `CMakeCache.txt`. Move a source tree, rename a drive letter, swap a compiler, or relocate a prebuilt-library directory, and CMake will often keep using the old, now-invalid paths rather than failing loudly, leading to confusing errors that have nothing to do with the actual change that was made.
 
-A compiler version can affect ABI compatibility. A library can depend on another library. A CMake configuration can remember an absolute path from a previous build. A DLL may be present but invisible through `PATH`. A library built with one compiler may not be directly usable with another. A seemingly small change in one component can invalidate an otherwise working environment.
+**Invisible runtime dependencies.** A DLL being present on disk doesn't mean the OS loader can find it. Windows resolves DLLs through a specific search order (the application's own directory, system directories, then `PATH`), and a DLL sitting in the wrong folder, or a `PATH` that wasn't updated after installing a new toolchain, produces the classic "it works on my machine" (or worse, "it worked yesterday") failure. This is precisely the class of problem tools like `ldd`-based dependency walkers exist to diagnose.
 
-The result is that building a scientific development environment becomes a project in itself.
+**Fragility under change.** Because every one of these components has implicit assumptions about the others (compiler ABI, runtime version, file paths, environment variables), a change to any single piece can invalidate an environment that had been stable for months. Upgrading one library, updating a compiler, or even just moving a directory can ripple outward in ways that are hard to predict in advance and just as hard to diagnose after the fact.
 
+Taken together, these interactions are why assembling a scientific computing environment is not really an installation task. It's systems engineering. It demands version pinning, reproducible builds, isolation between toolchains, and tooling to inspect and verify dependencies rather than assume they're correct. 
 **WinDev exists to address this problem.**
 
 ## 1.2 The PhD Experience
