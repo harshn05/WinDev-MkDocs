@@ -1,0 +1,95 @@
+site_name: WinDev
+site_description: Portable Windows Development Environment
+
+use_directory_urls: false
+
+theme:
+  name: readthedocs
+  navigation_depth: 4
+  collapse_navigation: false
+  sticky_navigation: true
+  include_homepage_in_sidebar: true
+  prev_next_buttons_location: bottom
+  highlightjs: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
+
+nav:
+  - "Home": index.md
+  - Part I — Motivation & Philosophy:
+      - "1. Why WinDev?": part-01-motivation/why-windev.md
+      - "2. WinDev Philosophy": part-01-motivation/philosophy.md
+  - Part II — Understanding WinDev:
+      - "3. WinDev at a Glance": part-02-understanding/overview.md
+      - "4. WinDev Architecture": part-02-understanding/architecture.md
+      - "5. The WinDev Execution Model": part-02-understanding/execution-model.md
+  - "Part III — ConEmu: The Entry Point":
+      - "6. ConEmu": part-03-conemu/conemu.md
+      - "7. WinDev Bootstrap": part-03-conemu/bootstrap.md
+      - "8. Critical WinDev Scripts": part-03-conemu/scripts.md
+  - Part IV — Toolchains:
+      - "9. Toolchain Architecture": part-04-toolchains/architecture.md
+      - "10. MinGW": part-04-toolchains/mingw.md
+      - "11. Microsoft Visual C++": part-04-toolchains/msvc.md
+      - "12. ClangMSVC": part-04-toolchains/clang-msvc.md
+      - "13. WinPython": part-04-toolchains/winpython.md
+      - "14. MSYS2": part-04-toolchains/msys2.md
+  - Part V — Environment Management:
+      - "15. Environment Variables": part-05-environment/variables.md
+      - "16. Library Discovery": part-05-environment/discovery.md
+      - "17. Library Loader Architecture": part-05-environment/loaders.md
+  - Part VI — Build System:
+      - "18. CMake": part-06-build-system/cmake.md
+      - "19. Build Generators": part-06-build-system/generators.md
+      - "20. WinDev Build Aliases": part-06-build-system/aliases.md
+  - Part VII — Scientific Libraries:
+      - "21. Library Strategy": part-07-libraries/strategy.md
+      - "22. OpenBLAS": part-07-libraries/openblas.md
+      - "23. Armadillo": part-07-libraries/armadillo.md
+      - "24. Qt": part-07-libraries/qt.md
+      - "25. VTK": part-07-libraries/vtk.md
+      - "26. OpenCV": part-07-libraries/opencv.md
+      - "27. ITK": part-07-libraries/itk.md
+  - Part VIII — Building WinDev Libraries:
+      - "28. General Library Build Workflow": part-08-building-libraries/workflow.md
+      - "29. Compiler-Specific Builds": part-08-building-libraries/toolchain-builds.md
+      - "30. Installation & Packaging": part-08-building-libraries/packaging.md
+  - Part IX — Testing & Verification:
+      - "31. Testing Philosophy": part-09-testing/philosophy.md
+      - "32. Toolchain Verification": part-09-testing/toolchains.md
+      - "33. Library Verification": part-09-testing/libraries.md
+      - "34. Cross-Toolchain Verification": part-09-testing/cross-toolchain.md
+  - Part X — Troubleshooting:
+      - "35. Troubleshooting Philosophy": part-10-troubleshooting/philosophy.md
+      - "36. Environment Problems": part-10-troubleshooting/environment.md
+      - "37. CMake Problems": part-10-troubleshooting/cmake.md
+      - "38. Linking & Runtime Problems": part-10-troubleshooting/linking-runtime.md
+      - "39. Known Patches & Workarounds": part-10-troubleshooting/patches.md
+  - Part XI — Reproducibility & Maintenance:
+      - "40. Version Management": part-11-maintenance/versions.md
+      - "41. Build Records": part-11-maintenance/build-records.md
+      - "42. Updating WinDev": part-11-maintenance/updating.md
+      - "43. Recovery": part-11-maintenance/recovery.md
+  - Part XII — Developer Reference:
+      - "44. Directory Reference": part-12-reference/directories.md
+      - "45. Script Reference": part-12-reference/scripts.md
+      - "46. Command Reference": part-12-reference/commands.md
+      - "47. Configuration Reference": part-12-reference/configuration.md
+  - Appendices:
+      - "A. Complete WinDev Directory Tree": appendices/directory-tree.md
+      - "B. Complete Toolchain Matrix": appendices/toolchain-matrix.md
+      - "C. Complete Library Matrix": appendices/library-matrix.md
+      - "D. Environment Variable Reference": appendices/environment-variables.md
+      - "E. Build Command Cheat Sheet": appendices/build-cheat-sheet.md
+      - "F. Known Patches": appendices/known-patches.md
+      - "G. Troubleshooting Quick Reference": appendices/troubleshooting.md
+      - "H. Version History": appendices/version-history.md
+      - "I. Design Decisions & Lessons Learned": appendices/design-decisions.md
+      - "J. From PhD Setup to WinDev": appendices/phd-to-windev.md
