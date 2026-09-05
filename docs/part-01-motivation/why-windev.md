@@ -35,25 +35,23 @@ WinDev is my attempt to eliminate that dependency, to move the knowledge out of 
 
 ## 1.3 Reproducibility
 
-Reproducibility is one of the central ideas behind WinDev.
+Reproducibility is one of the central ideas behind WinDev, and it is worth being precise about what that word actually means in this context.
 
-A development environment should not depend on:
+A development environment should not depend on any of the following:
 
-- a particular Windows installation,
-- a particular drive letter,
-- undocumented configuration,
-- manually remembered commands,
-- globally installed libraries,
-- accidental entries in the system `PATH`,
-- or knowledge that exists only in the developer's memory.
+- a particular Windows installation, with its own accumulated registry state and installed software history,
+- a particular drive letter, which can shift the moment a USB drive, network share, or external disk is plugged in differently,
+- undocumented configuration, the kind that exists only as a setting someone changed once and never wrote down,
+- manually remembered commands, run in a particular order that isn't recorded anywhere,
+- globally installed libraries, which silently couple every project on the machine to whatever version happens to be installed system-wide,
+- accidental entries in the system `PATH`, left behind by some other installer and now quietly resolving a name to the wrong binary,
+- or knowledge that exists only in the developer's memory, which is exactly the failure mode described earlier: an environment that works only as long as one person remembers why.
 
-Instead, the environment should have a defined structure and a documented procedure for reconstructing it.
+Each of these is a hidden dependency. None of them shows up in a project's source code or its documentation, yet all of them can determine whether a build succeeds or fails. A reproducible environment has to be defined independently of all of them. Instead of relying on the accumulated, undocumented state of a particular machine, the environment should have a defined structure and a documented procedure for reconstructing it, one that produces the same result on a different machine, a different drive letter, or the same machine after a clean reinstall.
 
-The objective is not necessarily to reproduce every byte of a previous installation.
+It's worth being clear about what reproducibility does not require. The objective is not to reproduce every byte of a previous installation, down to the exact registry entries or the exact filesystem layout. That standard is both impractical and unnecessary. The objective is to reproduce its **development behavior**: given the same source code and the same selected toolchain, the build should compile, link, and run the same way, regardless of which physical machine or drive it happens to be running from.
 
-The objective is to reproduce its **development behavior**.
-
-For example, WinDev provides controlled toolchain environments:
+WinDev approaches this by providing controlled, self-contained toolchain environments that the developer selects explicitly, rather than inheriting whatever happens to be configured globally:
 
 ```text
 WinDev
@@ -71,9 +69,9 @@ WinDev
           └── Portable Python environment
 ```
 
-Once an environment is selected, the required tools and libraries should become available through a predictable mechanism.
+Each branch of this structure is isolated from the others. Selecting MinGW should not leak MSVC's headers or libraries into the build, and selecting MSVC should not accidentally pick up a stray GCC binary that happens to be earlier in the `PATH`. Once an environment is selected, the required tools, compilers, and libraries should become available through a single predictable mechanism, consistently, every time, regardless of what else is installed on the machine.
 
-The developer should not have to remember how that environment was assembled.
+Crucially, the developer should not have to remember how that environment was assembled. The knowledge that once lived only in memory, which compiler flag mattered and why, which library version was compatible with which toolchain, which environment variable had to be set before which tool would run correctly, is meant to live in WinDev's structure instead. Selecting an environment should be enough. Remembering how it was built should not be necessary.
 
 ## 1.4 The Cost of Rebuilding an Environment
 
