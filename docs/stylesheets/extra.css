@@ -3,3 +3,7 @@
     width: auto;
     margin: 0;
 }
+
+.rst-content p {
+    text-align: justify;
+}
