@@ -19,23 +19,19 @@ Taken together, these interactions are why assembling a scientific computing env
 
 ## 1.2 The PhD Experience
 
-The motivation behind WinDev is not purely theoretical.
+The motivation behind WinDev is not purely theoretical. It comes directly out of my own PhD experience.
 
-During a PhD, building and maintaining a computational environment can consume a surprising amount of time and effort. The difficult part is often not writing the scientific code itself, but getting all the surrounding software infrastructure to work together correctly.
+During my PhD, I found that building and maintaining a computational environment could consume a surprising amount of time and effort, often more than the scientific work the environment was supposed to support. The difficult part was rarely writing the code itself. The code, once the environment was in place, was often the easy part. What actually ate the hours, days, and sometimes weeks was getting the surrounding software infrastructure to work together correctly, and then keeping it working as things changed around it.
 
-Libraries have to be built. Compilers have to be configured. Dependencies have to be located. Build systems have to be understood. Environment variables have to be configured. Different versions have to be tested.
+Libraries had to be built, often from source, often against a specific compiler that the library's own documentation only partially specified. Compilers had to be configured, and configured consistently across every tool that touched them, from the IDE to the build system to the linker. Dependencies had to be located, and half the time a dependency wasn't missing so much as present in the wrong version, in the wrong place, or built with the wrong flags. Build systems like CMake had to be understood well enough to read through their error messages, which often described the symptom rather than the cause. Environment variables had to be set correctly, and forgotten just as easily, especially after a system update or a new machine. Different versions of the same library or compiler had to be tested against each other, because the "latest" version was not always the one that actually worked with everything else already in place.
 
-And when something breaks, the developer has to determine whether the problem comes from the compiler, the library, CMake, the linker, the runtime environment, or an incorrect configuration.
+And when something inevitably broke, I had to work out, usually under time pressure, whether the problem was coming from the compiler, the library, CMake, the linker, the runtime environment, or simply a configuration I had gotten wrong myself. Each of these failure modes looks similar from the outside: a build that won't complete, or a program that crashes for no obvious reason. Distinguishing between them required experience I didn't have yet the first time I encountered them, and had to build up the hard way, one broken environment at a time.
 
-The deeper problem is that **the knowledge required to reproduce the environment accumulates gradually**.
+The deeper problem, though, wasn't any single bug. It was that the knowledge required to reproduce the environment accumulated gradually, and mostly in my head. After spending days chasing down a particular problem, the eventual solution would feel obvious, almost embarrassingly so, once I finally understood it. But that sense of obviousness was deceptive. It existed only because I had just spent days building the context needed to see it. Months or years later, when I looked back at a particular compiler flag, a specific directory structure, a small patch to a library's source, or an environment variable I had set, the original reasoning behind it was often gone. I knew it had mattered. I no longer knew why.
 
-After spending days solving a particular problem, the solution eventually becomes obvious to the person who solved it. Months or years later, however, the exact reason for a particular compiler flag, directory structure, patch, or environment variable may no longer be obvious.
+This creates a genuinely dangerous situation, one I ran into more than once: a working environment becomes dependent on the memory of the person who built it. As long as I remembered why things were arranged the way they were, everything worked. The moment that memory faded, or I moved to a new machine, or someone else needed to reproduce what I had built, the environment became fragile in a way that had nothing to do with the code itself and everything to do with lost context.
 
-This creates a dangerous situation:
-
-> A working environment can become dependent on the memory of the person who built it.
-
-WinDev is an attempt to eliminate that dependency.
+WinDev is my attempt to eliminate that dependency, to move the knowledge out of my head and into something durable, versioned, and reproducible, so that a working environment no longer depends on anyone's memory, including my own.
 
 ## 1.3 Reproducibility
 
