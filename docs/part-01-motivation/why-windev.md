@@ -75,36 +75,30 @@ Crucially, the developer should not have to remember how that environment was as
 
 ## 1.4 The Cost of Rebuilding an Environment
 
-The cost of a development environment is not simply the disk space occupied by its software.
+The cost of a development environment is not simply the disk space occupied by its software. Disk space is cheap and easy to measure. There is another, much larger cost, one that rarely gets budgeted for and almost never gets documented: **the time required to reconstruct it.**
 
-There is another, much larger cost:
-
-**the time required to reconstruct it.**
-
-Consider a library that took several hours to build correctly.
-
-The final successful command might be only one line:
+Consider a library that took several hours, or in some cases days, to build correctly. Once it finally works, the final successful command might be reduced to something deceptively short:
 
 ```text
 cmake ...
 ```
 
-But reaching that command may have required:
+Looking at that single line in isolation, it would be reasonable to assume the whole process took a few minutes. It doesn't show the hours of work that preceded it, and it gives no hint of how fragile the path to that command actually was. Reaching that one working invocation may have required a long, often nonlinear sequence of steps, something closer to this:
 
-1. identifying the correct version,
-2. choosing the compiler,
-3. identifying compatible dependencies,
-4. discovering an undocumented build option,
-5. modifying a source file,
-6. cleaning a stale CMake cache,
-7. correcting an installation prefix,
-8. resolving a linker problem,
-9. fixing a runtime DLL problem,
-10. testing the final installation.
+1. identifying the correct version of the library, since not every version is compatible with the rest of the environment, and the most recent release is not always the right choice,
+2. choosing the compiler, and confirming that the chosen compiler actually produces a binary compatible with everything else the library needs to link against,
+3. identifying compatible dependencies, often by trial and error, since compatibility is rarely stated explicitly and version constraints are often implicit,
+4. discovering an undocumented build option, buried in a forum post, a mailing list archive, or a comment inside the library's own build scripts, without which the build fails or silently misconfigures itself,
+5. modifying a source file directly, because a bug, a missing platform check, or an assumption baked into the code simply doesn't hold for this particular combination of compiler and OS,
+6. cleaning a stale CMake cache, after wasting time debugging an error that had nothing to do with the actual code and everything to do with a cached path from a previous, unrelated build,
+7. correcting an installation prefix, so that the library installs where the rest of the environment expects to find it, rather than where its defaults happen to place it,
+8. resolving a linker problem, tracing an unresolved symbol or a duplicate definition back to a mismatch between library versions or calling conventions,
+9. fixing a runtime DLL problem, discovering that the build succeeded but the resulting binary can't actually run because a dependency isn't where the loader expects it,
+10. testing the final installation, to confirm that what was built doesn't just compile, but actually behaves correctly when used from the rest of the environment.
 
-The final command does not contain that history. Without documentation, that knowledge disappears.
+Each of these steps can consume anywhere from minutes to hours on its own, and any one of them, if skipped or forgotten the next time, is enough to make the build fail again from scratch. The final command does not contain any of that history. It is the last line of a much longer story, and it gives no indication that the story exists at all. Without documentation, that knowledge disappears, not gradually, but almost immediately, since the details of steps 4 through 9 are exactly the kind of thing that feels obvious right after solving them and becomes completely opaque a few months later.
 
-WinDev therefore treats **the process of building the environment as knowledge that must itself be preserved.**
+WinDev therefore treats **the process of building the environment as knowledge that must itself be preserved.** The one-line command is not the artifact worth keeping. The path that led to it is.
 
 ## 1.5 Complexity of Modern Scientific Software
 
